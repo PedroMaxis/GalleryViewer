@@ -17,7 +17,7 @@ function Gallery() {
         <div className="gallery-container">
             {items.map((item, index) => (
                 <div key={index} className="gallery-item">
-                    <img src={`http://localhost:5000/${item.imageUrl}`} alt={item.name} />
+                    <img src={`http://localhost:5000${item.imageUrl}`} alt={item.name} />
                     <p>{item.name}</p>
                 </div>
             ))}
