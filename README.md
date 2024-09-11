@@ -9,6 +9,7 @@ Uma aplicação usada para enviar uma imagem com titulo e exibir em grid mosaico
 
 ## Rodar Localmente
 
+
 Clone o projeto.
 
 ```bash
