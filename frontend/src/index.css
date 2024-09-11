@@ -11,3 +11,28 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+header{
+  padding-left: 2em;
+  background-color:darkgreen;
+  display: flex;
+  color: aliceblue;
+  justify-content: left;
+  align-items: center;
+  margin-bottom: 4em;
+}
+header ul li{
+  font-weight: 900;
+  display: inline-block;
+  margin-right: 2em;
+  color: aliceblue;
+}
+header h1{
+  font-weight: 900;
+  display: inline-block;
+  color: aliceblue;
+}
+@media screen and (max-width: 650px){
+ header h1{
+  display: none;
+ }
+}

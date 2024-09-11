@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './Form.css'; 
+import Header from './header';
 
 
 function UploadForm() {
@@ -26,6 +27,8 @@ function UploadForm() {
     };
 
     return (
+        <>
+        <Header></Header>
         <form onSubmit={handleSubmit}>
             <input
                 type="text"
@@ -41,6 +44,7 @@ function UploadForm() {
             />
             <button type="submit">Upload</button>
         </form>
+        </>
     );
 }
 

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './Gallery.css'; // Importe o arquivo CSS
+import './Gallery.css'; 
+import Header from './header.jsx';
 
 function Gallery() {
     const [items, setItems] = useState([]);
@@ -14,6 +15,8 @@ function Gallery() {
     }, []);
 
     return (
+        <>
+        <Header></Header>
         <div className="gallery-container">
             {items.map((item, index) => (
                 <div key={index} className="gallery-item">
@@ -22,6 +25,7 @@ function Gallery() {
                 </div>
             ))}
         </div>
+        </>
     );
 }
 
