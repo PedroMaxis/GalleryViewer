@@ -48,7 +48,7 @@ app.post('/upload', upload.single('image'), (req, res) => {
     const { name } = req.body;
     const imageUrl = `/uploads/${req.file.filename}`;
     
-    let query = `INSERT INTO cad_imagem (img_name, img_url) VALUES (?, ?)`;
+    const query = `INSERT INTO cad_imagem (img_name, img_url) VALUES (?, ?)`;
     db.run(query, [name, imageUrl], function (err) {
         if (err) {
             return res.status(500).json({ error: 'Erro ao salvar no banco de dados.' });
@@ -83,7 +83,19 @@ async function cleanUploadsDirectory() {
     }
 }
 
+async function deleteDatabase()
+{
+    const query = 'DELETE FROM cad_imagem'
+    db.run(query,[], function (err) {
+        if (err) {
+            console.error('Erro ao Deletar Banco de Dados:', err);
+        }
+    });
+
+}
+
 app.listen(PORT, async () => {
+    deleteDatabase();
     await cleanUploadsDirectory();
     console.log(`Server rodando em http://localhost:${PORT}`);
 });
