@@ -47,9 +47,8 @@ db.run(`
 app.post('/upload', upload.single('image'), (req, res) => {
     const { name } = req.body;
     const imageUrl = `/uploads/${req.file.filename}`;
-
-    // Inserir dados no banco de dados
-    const query = `INSERT INTO cad_imagem (img_name, img_url) VALUES (?, ?)`;
+    
+    let query = `INSERT INTO cad_imagem (img_name, img_url) VALUES (?, ?)`;
     db.run(query, [name, imageUrl], function (err) {
         if (err) {
             return res.status(500).json({ error: 'Erro ao salvar no banco de dados.' });
