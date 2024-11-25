@@ -8,7 +8,7 @@ function Gallery() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const result = await axios.get('http://localhost:5000/items');
+            const result = await axios.get('https://galleryviewer.onrender.com/items');
             setItems(result.data);
         };
         fetchData();
@@ -20,7 +20,7 @@ function Gallery() {
         <div className="gallery-container">
             {items.map((item, index) => (
                 <div key={index} className="gallery-item">
-                    <img src={`http://localhost:5000${item.img_url}`} alt={item.name} />
+                    <img src={`https://galleryviewer.onrender.com${item.img_url}`} alt={item.name} />
                     <p>{item.img_name}</p>
                 </div>
             ))}
