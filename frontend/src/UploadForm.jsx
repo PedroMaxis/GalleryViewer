@@ -17,7 +17,7 @@ function UploadForm() {
         formData.append('image', image);
 
         try {
-            await axios.post('http://localhost:5000/upload', formData, {
+            await axios.post('https://galleryviewer.onrender.com/upload', formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
             navigate('/gallery');
