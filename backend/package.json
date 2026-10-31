@@ -1,18 +1,28 @@
 {
-  "name": "galleryviewer",
-  "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "name": "galleryviewer-api",
+  "version": "2.0.0",
+  "private": true,
+  "description": "API da galeria de imagens (Express + SQLite)",
+  "main": "src/server.js",
+  "engines": {
+    "node": ">=22.13"
   },
-  "keywords": [],
-  "author": "",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "node --test",
+    "seed": "node scripts/seed.js"
+  },
   "license": "ISC",
-  "description": "",
   "dependencies": {
-    "cors": "^2.8.5",
-    "express": "^4.20.0",
-    "multer": "^1.4.5-lts.1",
-    "sqlite3": "^5.1.7"
+    "cors": "^2.8.6",
+    "express": "^4.22.3",
+    "express-rate-limit": "^8.7.2",
+    "helmet": "^8.3.0",
+    "multer": "^1.4.4",
+    "sharp": "^0.35.5"
+  },
+  "devDependencies": {
+    "supertest": "^7.3.1"
   }
 }

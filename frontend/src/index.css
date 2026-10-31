@@ -1,38 +1,264 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    color-scheme: light;
+    background: #f4f0e8;
+  }
+  body {
+    @apply bg-parede font-sans text-tinta antialiased;
+  }
+  #root {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* a parede: luz de teto + ruído de gesso */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: radial-gradient(1400px 560px at 50% -10%, rgba(255, 251, 238, 0.95), transparent 72%),
+      radial-gradient(1000px 520px at 100% 100%, rgba(120, 95, 60, 0.08), transparent 62%),
+      radial-gradient(800px 420px at 0% 80%, rgba(120, 95, 60, 0.05), transparent 60%);
+  }
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 80;
+    pointer-events: none;
+    opacity: 0.55;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .25  0 0 0 0 .2  0 0 0 0 .12  0 0 0 .09 0'/></filter><rect width='180' height='180' filter='url(%23n)'/></svg>");
+  }
+  ::selection {
+    @apply bg-ponto text-white;
+  }
+  :focus-visible {
+    @apply outline-none ring-2 ring-tinta ring-offset-2 ring-offset-parede;
+  }
+  dialog::backdrop {
+    background: rgba(40, 32, 20, 0.55);
+    backdrop-filter: blur(3px);
+  }
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-40;
+  }
+  .btn-primary {
+    @apply btn bg-tinta text-gesso hover:bg-black;
+  }
+  .btn-ghost {
+    @apply btn border border-tinta/25 text-tinta hover:border-tinta/60 hover:bg-tinta/5;
+  }
+  .rotulo {
+    @apply font-mono text-[10px] uppercase tracking-[0.2em] text-grafite;
+  }
+  .campo {
+    @apply w-full border-0 border-b border-tinta/25 bg-transparent px-0 py-2 text-tinta placeholder:text-tinta/30 focus:border-tinta focus:outline-none focus:ring-0;
+  }
+  .placa {
+    background: #fdfcf9;
+    border: 1px solid rgba(27, 25, 22, 0.12);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.9) inset, 0 8px 14px -10px rgba(45, 32, 12, 0.4);
+  }
 }
-header{
-  padding-left: 2em;
-  background-color:darkgreen;
-  display: flex;
-  color: aliceblue;
-  justify-content: left;
-  align-items: center;
-  margin-bottom: 4em;
+
+/* ---------- molduras e passe-partout ---------- */
+.moldura {
+  --larg: 11px;
+  display: block;
+  width: 100%;
+  padding: var(--larg);
+  background: #1d1b19;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14), inset 0 0 0 3px rgba(0, 0, 0, 0.28), 0 1px 1px rgba(0, 0, 0, 0.25),
+    0 10px 14px -6px rgba(45, 32, 12, 0.3), 0 30px 46px -16px rgba(45, 32, 12, 0.34);
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.4s;
 }
-header ul li{
-  font-weight: 900;
+.moldura-preta {
+  background: #1d1b19;
+}
+.moldura-madeira {
+  background: linear-gradient(135deg, #a07a4c, #7a5833 48%, #a98456);
+}
+.moldura-dourada {
+  background: linear-gradient(135deg, #dcbb70, #b98f3f 46%, #ecd08f);
+}
+.moldura-branca {
+  --larg: 9px;
+  background: #fdfcf9;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08), 0 1px 1px rgba(0, 0, 0, 0.18), 0 10px 14px -6px rgba(45, 32, 12, 0.25),
+    0 30px 46px -16px rgba(45, 32, 12, 0.3);
+}
+.moldura.ajustada {
   display: inline-block;
-  margin-right: 2em;
-  color: aliceblue;
+  width: auto;
+  max-width: 100%;
 }
-header h1{
-  font-weight: 900;
-  display: inline-block;
-  color: aliceblue;
+.passe {
+  display: block;
+  background: #fbf9f4;
+  padding: var(--passe, 8%);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.06), inset 1px 3px 6px rgba(0, 0, 0, 0.2);
 }
-@media screen and (max-width: 650px){
- header h1{
-  display: none;
- }
+.passe > img {
+  display: block;
+  width: 100%;
+  height: auto;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2), 0 1px 5px rgba(0, 0, 0, 0.2);
+}
+.moldura.ajustada .passe {
+  padding: clamp(16px, 3.2vw, 38px);
+}
+.moldura.ajustada .passe > img {
+  width: auto;
+  max-width: 100%;
+  max-height: 62vh;
+}
+
+/* ---------- a obra na parede ---------- */
+.obra {
+  position: relative;
+}
+.obra:hover .moldura,
+.obra:focus-within .moldura {
+  transform: translateY(-5px);
+}
+/* luminária de galeria acende sobre a obra */
+.luminaria {
+  position: absolute;
+  left: 50%;
+  top: -24px;
+  width: 42%;
+  max-width: 190px;
+  height: 5px;
+  transform: translateX(-50%);
+  border-radius: 3px;
+  background: linear-gradient(#4a443a, #1d1b19);
+  opacity: 0;
+  transition: opacity 0.45s;
+  pointer-events: none;
+}
+.luminaria::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -16px;
+  width: 2px;
+  height: 16px;
+  background: #1d1b19;
+  transform: translateX(-50%);
+}
+.luz {
+  position: absolute;
+  left: 50%;
+  top: -20px;
+  width: 120%;
+  height: 135%;
+  transform: translateX(-50%);
+  background: radial-gradient(ellipse 58% 100% at 50% 0%, rgba(255, 228, 160, 0.6), rgba(255, 228, 160, 0.2) 46%, transparent 74%);
+  mix-blend-mode: soft-light;
+  opacity: 0;
+  transition: opacity 0.5s;
+  pointer-events: none;
+}
+.obra:hover .luminaria,
+.obra:focus-within .luminaria,
+.obra:hover .luz,
+.obra:focus-within .luz {
+  opacity: 1;
+}
+
+/* o ponto vermelho (obra colecionada) */
+.ponto {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  margin-top: 2px;
+  border-radius: 9999px;
+  border: 1.5px solid rgba(27, 25, 22, 0.35);
+  background: transparent;
+  transition: transform 0.25s, background 0.25s, border-color 0.25s, box-shadow 0.25s;
+}
+.ponto:hover {
+  border-color: #e2452c;
+  transform: scale(1.2);
+}
+.ponto[aria-pressed="true"] {
+  background: #e2452c;
+  border-color: #e2452c;
+  box-shadow: 0 0 0 3px rgba(226, 69, 44, 0.18);
+}
+
+/* entrada: a obra é pendurada e balança até assentar */
+@keyframes pendurar {
+  0% {
+    opacity: 0;
+    transform: translateY(-22px) rotate(-1.8deg);
+  }
+  55% {
+    opacity: 1;
+    transform: translateY(4px) rotate(0.6deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) rotate(0);
+  }
+}
+.pendurar {
+  transform-origin: 50% 0;
+  animation: pendurar 0.95s cubic-bezier(0.3, 1.1, 0.4, 1) both;
+  animation-delay: var(--atraso, 0ms);
+}
+@keyframes revelar {
+  from {
+    opacity: 0;
+    filter: blur(10px) saturate(0.4);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0) saturate(1);
+  }
+}
+.revelar {
+  animation: revelar 0.8s ease-out both;
+}
+@keyframes pulso {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(226, 69, 44, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 0 9px rgba(226, 69, 44, 0);
+  }
+}
+.recem-chegada {
+  animation: pulso 1.6s ease-in-out 3;
+}
+
+/* luz de ambiente que segue o cursor: escurece levemente o entorno */
+.foco-luz {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  pointer-events: none;
+  background: radial-gradient(560px circle at var(--mx, 50%) var(--my, 28%), transparent 0, rgba(60, 40, 12, 0.085) 100%);
+  mix-blend-mode: multiply;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
