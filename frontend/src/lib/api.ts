@@ -23,7 +23,9 @@ export interface Pagina {
 // Em produção, VITE_API_URL aponta para o domínio da API; em desenvolvimento fica vazio (proxy do Vite).
 const BASE = (import.meta.env.VITE_API_URL ?? "").replace(/\/$/, "");
 
-export const urlApi = (caminho: string): string => `${BASE}${caminho}`;
+// no demo (GitHub Pages) as obras vêm de endereços completos (museus) ou de blob: locais, que não levam o prefixo da API
+const DEMO = Boolean(import.meta.env.VITE_DEMO);
+export const urlApi = (caminho: string): string => (/^(https?:|blob:)/.test(caminho) ? caminho : `${BASE}${caminho}`);
 
 export class ErroApi extends Error {
   constructor(
@@ -68,7 +70,7 @@ export const montarConsulta = (params: { page?: number; limit?: number; q?: stri
 };
 
 export const listarImagens = (params: { page?: number; limit?: number; q?: string }, sinal?: AbortSignal): Promise<Pagina> =>
-  pedir<Pagina>(`/api/images${montarConsulta(params)}`, { signal: sinal });
+  DEMO ? import("./demo").then((d) => d.listarDemo(params)) : pedir<Pagina>(`/api/images${montarConsulta(params)}`, { signal: sinal });
 
 /** Dados da etiqueta da obra */
 export interface Etiqueta {
@@ -79,17 +81,22 @@ export interface Etiqueta {
 }
 
 export const atualizarImagem = (id: number, dados: Partial<Etiqueta>): Promise<Imagem> =>
-  pedir<Imagem>(`/api/images/${id}`, {
+  DEMO ? import("./demo").then((d) => d.atualizarDemo(id, dados)) : pedir<Imagem>(`/api/images/${id}`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ ...dados, year: dados.year === undefined ? undefined : (dados.year ?? "") }),
   });
 
-export const excluirImagem = (id: number): Promise<void> => pedir<void>(`/api/images/${id}`, { method: "DELETE" });
+export const excluirImagem = (id: number): Promise<void> =>
+  DEMO ? import("./demo").then((d) => d.excluirDemo(id)) : pedir<void>(`/api/images/${id}`, { method: "DELETE" });
 
 /** Envia com XMLHttpRequest para ter o progresso do upload (o fetch ainda não expõe isso) */
 export const enviarImagem = (etiqueta: Etiqueta, arquivo: File, onProgresso?: (fracao: number) => void): Promise<Imagem> =>
   new Promise((resolve, reject) => {
+    if (DEMO) {
+      import("./demo").then((d) => d.enviarDemo(etiqueta, arquivo, onProgresso)).then(resolve, (e: Error) => reject(new ErroApi(e.message, 400)));
+      return;
+    }
     const dados = new FormData();
     dados.append("title", etiqueta.title);
     dados.append("artist", etiqueta.artist);
