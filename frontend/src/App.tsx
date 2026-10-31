@@ -1,4 +1,7 @@
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { BrowserRouter, HashRouter, Navigate, Route, Routes } from "react-router-dom";
+
+// no demo estático (GitHub Pages) as rotas usam # para não depender de fallback do servidor
+const Roteador = import.meta.env.VITE_DEMO ? HashRouter : BrowserRouter;
 import Layout from "@/components/Layout";
 import ToastProvider from "@/components/ToastProvider";
 import Enviar from "@/pages/Enviar";
@@ -6,7 +9,7 @@ import Galeria from "@/pages/Galeria";
 import NaoEncontrado from "@/pages/NaoEncontrado";
 
 const App = () => (
-  <BrowserRouter>
+  <Roteador>
     <ToastProvider>
       <Routes>
         <Route element={<Layout />}>
@@ -18,7 +21,7 @@ const App = () => (
         </Route>
       </Routes>
     </ToastProvider>
-  </BrowserRouter>
+  </Roteador>
 );
 
 export default App;

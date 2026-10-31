@@ -3,6 +3,8 @@
 Uma galeria de arte no navegador: suas imagens viram **obras expostas em um mosaico que cobre a tela inteira**, com
 etiqueta de museu, moldura e uma coleção pessoal marcada com o ponto vermelho das galerias.
 
+**Demo online:** https://pedromaxis.github.io/GalleryViewer/ (roda só no navegador, sem servidor: busca, etiquetas e envio de obras funcionam, mas o que você enviar some ao recarregar).
+
 | Mosaico em tela cheia | Etiqueta ao passar o mouse |
 | --- | --- |
 | ![Mosaico](docs/mosaico.png) | ![Etiqueta](docs/etiqueta.png) |
@@ -92,6 +94,10 @@ cd frontend && npm test && npm run lint && npm run build
 ```
 
 A CI do GitHub Actions roda tudo a cada push e pull request.
+
+## Demo no GitHub Pages
+
+O Pages só serve arquivos estáticos, então o demo troca a API por um catálogo em memória (`frontend/src/lib/demo.ts`), alimentado por `frontend/public/demo/obras.json`: obras CC0 do Cleveland Museum of Art, com as imagens carregadas direto do museu. As do Art Institute ficam de fora porque o servidor de imagens deles recusa carregamento a partir de outros sites. Para regerar o catálogo: `node frontend/scripts/gerar-obras.mjs`; para compilar o demo: `npm --prefix frontend run build:demo`.
 
 ## Deploy
 
